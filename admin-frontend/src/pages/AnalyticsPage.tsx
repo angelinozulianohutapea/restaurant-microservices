@@ -1,4 +1,3 @@
-
 import {
   BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer,
   LineChart, Line, PieChart, Pie, Cell, Legend, AreaChart, Area,
@@ -6,10 +5,11 @@ import {
 import { Card, CardHeader } from '../components/ui/Card';
 import { Badge } from '../components/ui/Badge';
 import { useStats } from '../hooks/useStats';
+import { useMenu } from '../hooks/useMenu';
 import { TrendingUp, TrendingDown, BarChart3 } from 'lucide-react';
 
 // =============================================
-// DATA GENERATORS
+// DATA GENERATORS (chart simulasi)
 // =============================================
 const generateDailyRevenue = () => {
   const days = ['Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat', 'Sabtu', 'Minggu'];
@@ -28,15 +28,6 @@ const generateMonthlyRevenue = () => {
     prev: Math.floor(15000000 + Math.random() * 6000000 + i * 400000),
   }));
 };
-
-const POPULAR_MENUS = [
-  { name: 'Nasi Goreng Special', orders: 347, revenue: 9369000, percent: 100 },
-  { name: 'Mie Ayam Bakso', orders: 289, revenue: 7803000, percent: 83 },
-  { name: 'Sate Ayam', orders: 234, revenue: 6318000, percent: 67 },
-  { name: 'Rendang Daging', orders: 198, revenue: 8910000, percent: 57 },
-  { name: 'Ayam Bakar', orders: 176, revenue: 5984000, percent: 51 },
-  { name: 'Soto Ayam', orders: 165, revenue: 3630000, percent: 48 },
-];
 
 const PAYMENT_METHODS = [
   { name: 'Transfer Bank', value: 45, color: '#6366f1' },
@@ -77,20 +68,32 @@ const RevTooltip = ({ active, payload, label }: any) => {
 // =============================================
 // TREND CARD
 // =============================================
-function TrendCard({ title, value, change, up }: { title: string; value: string; change: string; up: boolean }) {
+function TrendCard({
+  title, value, sub, up, change
+}: {
+  title: string;
+  value: string;
+  sub?: string;
+  up?: boolean;
+  change?: string;
+}) {
   return (
     <div className="bg-white rounded-2xl border border-slate-200 p-5 shadow-sm">
       <p className="text-xs text-slate-500 font-medium">{title}</p>
       <p className="text-2xl font-bold text-slate-900 mt-1">{value}</p>
-      <div className="flex items-center gap-1.5 mt-2">
-        {up ? (
-          <TrendingUp size={13} className="text-emerald-500" />
-        ) : (
-          <TrendingDown size={13} className="text-red-500" />
-        )}
-        <span className={`text-xs font-semibold ${up ? 'text-emerald-600' : 'text-red-600'}`}>{change}</span>
-        <span className="text-xs text-slate-400">vs last month</span>
-      </div>
+      {change !== undefined && up !== undefined ? (
+        <div className="flex items-center gap-1.5 mt-2">
+          {up ? (
+            <TrendingUp size={13} className="text-emerald-500" />
+          ) : (
+            <TrendingDown size={13} className="text-red-500" />
+          )}
+          <span className={`text-xs font-semibold ${up ? 'text-emerald-600' : 'text-red-600'}`}>{change}</span>
+          <span className="text-xs text-slate-400">vs last month</span>
+        </div>
+      ) : sub ? (
+        <p className="text-xs text-slate-400 mt-2">{sub}</p>
+      ) : null}
     </div>
   );
 }
@@ -99,24 +102,88 @@ function TrendCard({ title, value, change, up }: { title: string; value: string;
 // MAIN COMPONENT
 // =============================================
 export function AnalyticsPage() {
-  const { stats } = useStats();
+  const { stats, usingMock } = useStats();
+  const { menu } = useMenu();
+
+  // Hitung avg order value dari data real
+  const avgOrderValue = stats.total_orders > 0
+    ? Math.round(stats.total_revenue / stats.total_orders)
+    : 0;
+
+  // Top menu berdasarkan data real (urutkan by stock terendah sebagai proxy popularitas)
+  const topMenus = [...menu]
+    .sort((a, b) => a.stock - b.stock)
+    .slice(0, 6)
+    .map((m, i, arr) => ({
+      name: m.menu_name,
+      stock: m.stock,
+      price: m.price,
+      percent: arr[0].stock > 0 ? Math.round((1 - m.stock / (arr[arr.length - 1].stock || 1)) * 100) : 100 - i * 15,
+    }));
+
+  // Format uptime
+  const formatUptime = (seconds: number) => {
+    const h = Math.floor(seconds / 3600);
+    const m = Math.floor((seconds % 3600) / 60);
+    return `${h}j ${m}m`;
+  };
 
   return (
     <div className="space-y-6">
-      {/* KPI Cards */}
+      {/* Demo warning */}
+      {usingMock && (
+        <div className="bg-amber-50 border border-amber-200 rounded-xl px-4 py-2.5 text-xs text-amber-700 font-medium">
+          ⚠ Backend unavailable — menampilkan data demo
+        </div>
+      )}
+
+      {/* KPI Cards — data real dari backend */}
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-        <TrendCard title="Monthly Revenue" value={`Rp ${(stats.total_revenue / 1000000).toFixed(1)}M`} change="+12.4%" up />
-        <TrendCard title="Total Orders" value={stats.total_orders.toLocaleString('id-ID')} change="+8.7%" up />
-        <TrendCard title="Avg Order Value" value={`Rp ${Math.round(stats.total_revenue / Math.max(1, stats.total_orders)).toLocaleString('id-ID')}`} change="+3.2%" up />
-        <TrendCard title="Conversion Rate" value="88.3%" change="-1.2%" up={false} />
+        <TrendCard
+          title="Total Revenue"
+          value={`Rp ${stats.total_revenue.toLocaleString('id-ID')}`}
+          sub={`${stats.total_payments} pembayaran`}
+        />
+        <TrendCard
+          title="Total Orders"
+          value={stats.total_orders.toLocaleString('id-ID')}
+          sub={`${stats.total_users} users terdaftar`}
+        />
+        <TrendCard
+          title="Avg Order Value"
+          value={`Rp ${avgOrderValue.toLocaleString('id-ID')}`}
+          sub="Per transaksi"
+        />
+        <TrendCard
+          title="Total Menu"
+          value={stats.total_menu.toString()}
+          sub={`${stats.low_stock_items} item stok rendah`}
+        />
+      </div>
+
+      {/* DB Status Row */}
+      <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+        {[
+          { label: 'Database Role', value: stats.database_role, ok: stats.database_role === 'PRIMARY' },
+          { label: 'Replication', value: stats.replication_status, ok: stats.replication_status === 'STREAMING' },
+          { label: 'Failover', value: stats.failover_status, ok: stats.failover_status === 'NORMAL' },
+          { label: 'Uptime', value: formatUptime(stats.uptime), ok: true },
+        ].map(item => (
+          <div key={item.label} className="bg-white rounded-2xl border border-slate-200 p-4 shadow-sm">
+            <p className="text-xs text-slate-500 font-medium">{item.label}</p>
+            <p className={`text-sm font-bold mt-1 ${item.ok ? 'text-emerald-600' : 'text-red-600'}`}>
+              {item.value}
+            </p>
+          </div>
+        ))}
       </div>
 
       {/* Revenue Chart */}
       <Card padding="md">
         <CardHeader
           title="Weekly Revenue vs Orders"
-          subtitle="Perbandingan revenue dan jumlah order mingguan"
-          action={<Badge variant="info" dot>Live</Badge>}
+          subtitle="Simulasi perbandingan revenue dan order mingguan"
+          action={<Badge variant="warning">Simulasi</Badge>}
           icon={<BarChart3 size={16} />}
         />
         <div className="h-64">
@@ -144,11 +211,11 @@ export function AnalyticsPage() {
 
       {/* Middle Row */}
       <div className="grid grid-cols-1 xl:grid-cols-3 gap-4">
-        {/* Monthly Trend */}
         <Card className="xl:col-span-2" padding="md">
           <CardHeader
             title="Monthly Revenue Trend"
-            subtitle="Revenue bulanan tahun ini vs tahun lalu"
+            subtitle="Simulasi revenue bulanan"
+            action={<Badge variant="warning">Simulasi</Badge>}
           />
           <div className="h-56">
             <ResponsiveContainer width="100%" height="100%">
@@ -179,21 +246,12 @@ export function AnalyticsPage() {
           </div>
         </Card>
 
-        {/* Payment Methods */}
         <Card padding="md">
-          <CardHeader title="Payment Methods" subtitle="Distribusi metode pembayaran" />
+          <CardHeader title="Payment Methods" subtitle="Distribusi metode pembayaran" action={<Badge variant="warning">Simulasi</Badge>} />
           <div className="h-48">
             <ResponsiveContainer width="100%" height="100%">
               <PieChart>
-                <Pie
-                  data={PAYMENT_METHODS}
-                  cx="50%"
-                  cy="50%"
-                  innerRadius={50}
-                  outerRadius={75}
-                  paddingAngle={4}
-                  dataKey="value"
-                >
+                <Pie data={PAYMENT_METHODS} cx="50%" cy="50%" innerRadius={50} outerRadius={75} paddingAngle={4} dataKey="value">
                   {PAYMENT_METHODS.map((entry) => (
                     <Cell key={entry.name} fill={entry.color} />
                   ))}
@@ -208,41 +266,49 @@ export function AnalyticsPage() {
 
       {/* Bottom Row */}
       <div className="grid grid-cols-1 xl:grid-cols-2 gap-4">
-        {/* Popular Menu */}
+        {/* Menu List — data real */}
         <Card padding="md">
-          <CardHeader title="Most Ordered Menu" subtitle="Top 6 menu terlaris" />
-          <div className="space-y-3">
-            {POPULAR_MENUS.map((menu, i) => (
-              <div key={menu.name} className="space-y-1.5">
-                <div className="flex items-center justify-between">
-                  <div className="flex items-center gap-2.5">
-                    <span className={`text-[10px] font-bold w-5 h-5 rounded-full flex items-center justify-center ${
-                      i === 0 ? 'bg-amber-100 text-amber-700' :
-                      i === 1 ? 'bg-slate-200 text-slate-700' :
-                      i === 2 ? 'bg-orange-100 text-orange-700' :
-                      'bg-slate-100 text-slate-500'
-                    }`}>{i + 1}</span>
-                    <span className="text-sm font-medium text-slate-700">{menu.name}</span>
+          <CardHeader title="Menu Stok Terendah" subtitle="Data real dari backend" action={<Badge variant="info" dot>Live</Badge>} />
+          {topMenus.length === 0 ? (
+            <p className="text-sm text-slate-400 text-center py-8">Tidak ada data menu</p>
+          ) : (
+            <div className="space-y-3">
+              {topMenus.map((menu, i) => (
+                <div key={menu.name} className="space-y-1.5">
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center gap-2.5">
+                      <span className={`text-[10px] font-bold w-5 h-5 rounded-full flex items-center justify-center ${
+                        i === 0 ? 'bg-red-100 text-red-700' :
+                        i === 1 ? 'bg-amber-100 text-amber-700' :
+                        i === 2 ? 'bg-orange-100 text-orange-700' :
+                        'bg-slate-100 text-slate-500'
+                      }`}>{i + 1}</span>
+                      <span className="text-sm font-medium text-slate-700">{menu.name}</span>
+                    </div>
+                    <div className="text-right">
+                      <span className="text-xs font-bold text-slate-800">{menu.stock} stok</span>
+                      <span className="text-[10px] text-slate-400 ml-1.5">Rp {menu.price.toLocaleString('id-ID')}</span>
+                    </div>
                   </div>
-                  <div className="text-right">
-                    <span className="text-xs font-bold text-slate-800">{menu.orders} orders</span>
-                    <span className="text-[10px] text-slate-400 ml-1.5">Rp {(menu.revenue / 1000000).toFixed(1)}M</span>
+                  <div className="w-full h-1.5 bg-slate-100 rounded-full overflow-hidden">
+                    <div
+                      className={`h-full rounded-full transition-all duration-500 ${
+                        menu.stock <= 2 ? 'bg-red-500' :
+                        menu.stock <= 5 ? 'bg-amber-500' :
+                        'bg-gradient-to-r from-indigo-500 to-violet-500'
+                      }`}
+                      style={{ width: `${Math.min(100, menu.stock * 2)}%` }}
+                    />
                   </div>
                 </div>
-                <div className="w-full h-1.5 bg-slate-100 rounded-full overflow-hidden">
-                  <div
-                    className="h-full rounded-full bg-gradient-to-r from-indigo-500 to-violet-500 transition-all duration-500"
-                    style={{ width: `${menu.percent}%` }}
-                  />
-                </div>
-              </div>
-            ))}
-          </div>
+              ))}
+            </div>
+          )}
         </Card>
 
-        {/* Hourly Traffic */}
+        {/* Hourly Traffic — simulasi */}
         <Card padding="md">
-          <CardHeader title="Hourly Order Traffic" subtitle="Distribusi pesanan per jam hari ini" />
+          <CardHeader title="Hourly Order Traffic" subtitle="Simulasi distribusi pesanan per jam" action={<Badge variant="warning">Simulasi</Badge>} />
           <div className="h-56">
             <ResponsiveContainer width="100%" height="100%">
               <LineChart data={HOURLY_DATA} margin={{ top: 5, right: 10, left: -20, bottom: 0 }}>

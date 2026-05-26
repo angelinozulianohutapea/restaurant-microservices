@@ -3,23 +3,23 @@ import { Stats } from '../types';
 import { API } from '../config/api';
 
 // =============================================
-// MOCK STATS FOR DEMO (when backend unavailable)
+// MOCK STATS (fallback saat backend mati)
 // =============================================
 const MOCK_STATS: Stats = {
-  total_users: 124,
-  total_menu: 38,
-  total_orders: 1847,
-  total_payments: 1632,
-  total_revenue: 18574000,
-  low_stock_items: 5,
-  database_role: 'PRIMARY',
-  database_host: '10.95.249.151',
-  database_port: 5432,
-  replication_status: 'STREAMING',
-  failover_status: 'NORMAL',
-  database_status: 'ONLINE',
-  microservice: 'RUNNING',
-  uptime: 86400,
+  total_users: 0,
+  total_menu: 0,
+  total_orders: 0,
+  total_payments: 0,
+  total_revenue: 0,
+  low_stock_items: 0,
+  database_role: 'UNKNOWN',
+  database_host: '-',
+  database_port: 0,
+  replication_status: 'UNKNOWN',
+  failover_status: 'UNKNOWN',
+  database_status: 'OFFLINE',
+  microservice: 'DOWN',
+  uptime: 0,
   timestamp: new Date().toISOString(),
 };
 
@@ -39,14 +39,6 @@ export function useStats(autoRefresh = true, intervalMs = 5000) {
       setUsingMock(false);
       setError(null);
     } catch {
-      // Simulate slight variation in mock data for realism
-      setStats(prev => ({
-        ...MOCK_STATS,
-        total_orders: prev.total_orders + Math.floor(Math.random() * 2),
-        total_revenue: prev.total_revenue + Math.floor(Math.random() * 50000),
-        uptime: prev.uptime + 5,
-        timestamp: new Date().toISOString(),
-      }));
       setUsingMock(true);
       setError('Backend unavailable — showing demo data');
     } finally {

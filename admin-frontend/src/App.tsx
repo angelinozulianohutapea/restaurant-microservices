@@ -10,6 +10,7 @@ import { AnalyticsPage } from './pages/AnalyticsPage';
 import { LogsPage } from './pages/LogsPage';
 import { SettingsPage } from './pages/SettingsPage';
 import { NavPage } from './types';
+import { useStats } from './hooks/useStats';
 
 // =============================================
 // PAGE RENDERER
@@ -36,6 +37,7 @@ export default function App() {
   const [activePage, setActivePage] = useState<NavPage>('dashboard');
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
   const [refetchKey, setRefetchKey] = useState(0);
+  const { usingMock } = useStats();
 
   const handleRefresh = useCallback(() => {
     setRefetchKey(k => k + 1);
@@ -63,13 +65,11 @@ export default function App() {
           page={activePage}
           onRefresh={handleRefresh}
           sidebarCollapsed={sidebarCollapsed}
-          demoMode={true}
+          demoMode={usingMock}
         />
 
         {/* Page Content */}
-        <main
-          className="pt-16 min-h-screen"
-        >
+        <main className="pt-16 min-h-screen">
           <div className="p-6 max-w-[1400px] mx-auto">
             {renderPage(activePage, refetchKey)}
           </div>

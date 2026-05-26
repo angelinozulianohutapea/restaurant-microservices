@@ -3,6 +3,7 @@ import { Card } from '../components/ui/Card';
 import { Badge } from '../components/ui/Badge';
 import { Button } from '../components/ui/Button';
 import { useOrders } from '../hooks/useOrders';
+import { useStats } from '../hooks/useStats';
 import { Search, RefreshCw, Filter, ShoppingCart, TrendingUp, Clock, CheckCircle2 } from 'lucide-react';
 
 const statusVariant = (status: string): 'success' | 'warning' | 'neutral' => {
@@ -35,7 +36,8 @@ export function OrdersPage() {
     return matchSearch && matchStatus;
   });
 
-  const totalRevenue = orders.filter(o => o.payment_status === 'paid').reduce((a, o) => a + o.total_price, 0);
+  const { stats } = useStats();
+  const totalRevenue = stats.total_revenue;
   const unpaidCount = orders.filter(o => o.payment_status === 'unpaid').length;
   const paidCount = orders.filter(o => o.payment_status === 'paid').length;
 
