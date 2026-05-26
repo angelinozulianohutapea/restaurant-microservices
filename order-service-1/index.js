@@ -4,7 +4,6 @@ const { Pool } = require('pg');
 const app = express();
 
 app.use(express.json());
-
 // =====================================
 // DATABASE VIA HAPROXY
 // =====================================
@@ -467,6 +466,7 @@ app.get('/orders', async (req, res) => {
   }
 
 });
+
 
 // =====================================
 // START SERVER
