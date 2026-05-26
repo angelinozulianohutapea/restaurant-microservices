@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
 import {
-  ShoppingCart, Plus, Minus, Trash2, Package, CheckCircle,
+  ShoppingCart, Plus, Minus, Trash2, Package, Clock3, CheckCircle,
   ChevronRight, ArrowLeft, Receipt, Loader2
 } from 'lucide-react';
 import { useCart } from '../hooks/useCart';
@@ -47,7 +47,7 @@ export default function Order() {
         data: res.data,
       });
       clearCart();
-      toast.success('Order placed successfully! 🎉');
+      toast.warning('Order created. Please complete payment.');
     } catch (err) {
       toast.error(err?.response?.data?.message || 'Failed to place order. Please try again.');
     } finally {
@@ -93,13 +93,13 @@ export default function Order() {
                 initial={{ scale: 0 }}
                 animate={{ scale: 1 }}
                 transition={{ type: 'spring', stiffness: 300, delay: 0.1 }}
-                className="w-24 h-24 mx-auto mb-6 rounded-full bg-gradient-to-br from-emerald-500 to-teal-500 flex items-center justify-center shadow-2xl shadow-emerald-500/30"
+                className="w-24 h-24 mx-auto mb-6 rounded-full bg-gradient-to-br from-yellow-500 to-orange-500 flex items-center justify-center shadow-2xl shadow-yellow-500/30"
               >
-                <CheckCircle className="w-12 h-12 text-white" />
+                <Clock3 className="w-12 h-12 text-white animate-pulse" />
               </motion.div>
 
               <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.2 }}>
-                <h2 className="text-3xl font-bold text-white mb-2">Order Placed!</h2>
+                <h2 className="text-4xl font-bold text-white mb-3">Waiting for Payment</h2>
                 <p className="text-white/50 mb-8">Your order has been submitted successfully.</p>
 
                 <div className="grid grid-cols-3 gap-4 max-w-sm mx-auto mb-8">
@@ -125,7 +125,7 @@ export default function Order() {
                     className="btn-primary px-8 py-3.5 rounded-xl font-bold flex items-center justify-center gap-2 shadow-lg shadow-purple-500/30"
                   >
                     <Receipt className="w-4 h-4" />
-                    Proceed to Payment
+                    Pay Now
                     <ChevronRight className="w-4 h-4" />
                   </motion.button>
                   <motion.button

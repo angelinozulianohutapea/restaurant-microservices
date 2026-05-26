@@ -3,12 +3,8 @@ import { cn } from '../../utils/cn';
 import { NavPage } from '../../types';
 import {
   LayoutDashboard,
-  Activity,
   ShoppingCart,
   Package,
-  Database,
-  BarChart3,
-  Settings,
   FileText,
   ChefHat,
   Zap,
@@ -24,13 +20,8 @@ interface NavItem {
 
 const navItems: NavItem[] = [
   { id: 'dashboard', label: 'Dashboard', icon: <LayoutDashboard size={18} /> },
-  { id: 'monitoring', label: 'Monitoring', icon: <Activity size={18} />, badge: 'LIVE', badgeColor: 'bg-emerald-500' },
   { id: 'orders', label: 'Orders', icon: <ShoppingCart size={18} /> },
   { id: 'stock', label: 'Stock', icon: <Package size={18} /> },
-  { id: 'database', label: 'Database', icon: <Database size={18} /> },
-  { id: 'analytics', label: 'Analytics', icon: <BarChart3 size={18} /> },
-  { id: 'logs', label: 'Logs', icon: <FileText size={18} />, badge: 'NEW', badgeColor: 'bg-blue-500' },
-  { id: 'settings', label: 'Settings', icon: <Settings size={18} /> },
 ];
 
 interface SidebarProps {

@@ -101,10 +101,6 @@ export interface User {
 
 export type NavPage =
   | 'dashboard'
-  | 'monitoring'
   | 'orders'
   | 'stock'
-  | 'database'
-  | 'analytics'
-  | 'settings'
-  | 'logs';
+

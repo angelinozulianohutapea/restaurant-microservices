@@ -2,10 +2,7 @@ import { useState, useEffect, useCallback } from 'react';
 import { Stats } from '../types';
 import { API } from '../config/api';
 
-// =============================================
-// MOCK STATS (fallback saat backend mati)
-// =============================================
-const MOCK_STATS: Stats = {
+const EMPTY_STATS: Stats = {
   total_users: 0,
   total_menu: 0,
   total_orders: 0,
@@ -20,27 +17,42 @@ const MOCK_STATS: Stats = {
   database_status: 'OFFLINE',
   microservice: 'DOWN',
   uptime: 0,
-  timestamp: new Date().toISOString(),
+  timestamp: '',
 };
 
 export function useStats(autoRefresh = true, intervalMs = 5000) {
-  const [stats, setStats] = useState<Stats>(MOCK_STATS);
+  const [stats, setStats] = useState<Stats>(EMPTY_STATS);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const [usingMock, setUsingMock] = useState(true);
 
   const fetchStats = useCallback(async () => {
     try {
       setLoading(true);
-      const res = await fetch(API.stats, { signal: AbortSignal.timeout(3000) });
-      if (!res.ok) throw new Error('Stats fetch failed');
+
+      const res = await fetch(API.stats, {
+        signal: AbortSignal.timeout(5000),
+      });
+
+      if (!res.ok) {
+        throw new Error(`Stats fetch failed (${res.status})`);
+      }
+
       const data = await res.json();
-      setStats(data);
-      setUsingMock(false);
+
+      setStats({
+        ...EMPTY_STATS,
+        ...data,
+      });
+
       setError(null);
-    } catch {
-      setUsingMock(true);
-      setError('Backend unavailable — showing demo data');
+
+    } catch (err) {
+      console.error('Fetch Stats Error:', err);
+
+      // tetap gunakan empty stats
+      setStats(EMPTY_STATS);
+
+      setError('Backend unavailable');
     } finally {
       setLoading(false);
     }
@@ -48,10 +60,18 @@ export function useStats(autoRefresh = true, intervalMs = 5000) {
 
   useEffect(() => {
     fetchStats();
+
     if (!autoRefresh) return;
+
     const id = setInterval(fetchStats, intervalMs);
+
     return () => clearInterval(id);
   }, [fetchStats, autoRefresh, intervalMs]);
 
-  return { stats, loading, error, usingMock, refetch: fetchStats };
+  return {
+    stats,
+    loading,
+    error,
+    refetch: fetchStats,
+  };
 }
