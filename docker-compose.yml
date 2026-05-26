@@ -1,0 +1,74 @@
+services:
+
+  nginx:
+    build:
+      context: ./nginx
+      dockerfile: Dockerfile
+    ports:
+      - "80:80"
+    depends_on:
+      - frontend
+      - gateway
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    ports:
+      - "5173:5173"
+
+  gateway:
+    build:
+      context: ./gateway
+      dockerfile: Dockerfile
+    ports:
+      - "8080:8080"
+    depends_on:
+      - user
+      - menu
+      - order-service-1
+      - order-service-2
+      - payment
+      - monitoring
+
+  user:
+    build:
+      context: ./user
+      dockerfile: Dockerfile
+    ports:
+      - "3000:3000"
+
+  menu:
+    build:
+      context: ./menu
+      dockerfile: Dockerfile
+    ports:
+      - "3002:3002"
+
+  order-service-1:
+    build:
+      context: ./order-service-1
+      dockerfile: Dockerfile
+    ports:
+      - "3001:3001"
+
+  order-service-2:
+    build:
+      context: ./order-service-2
+      dockerfile: Dockerfile
+    ports:
+      - "3005:3005"
+
+  payment:
+    build:
+      context: ./payment
+      dockerfile: Dockerfile
+    ports:
+      - "3003:3003"
+
+  monitoring:
+    build:
+      context: ./monitoring
+      dockerfile: Dockerfile
+    ports:
+      - "3004:3004"
