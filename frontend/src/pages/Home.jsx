@@ -19,71 +19,65 @@ const microservices = [
   {
     icon: Globe,
     title: 'API Gateway',
-    desc: 'Single entry point routing all requests with rate limiting and authentication middleware.',
+    desc: 'Pusat akses utama untuk mengatur seluruh permintaan sistem.',
     color: 'from-purple-500 to-violet-600',
-    status: 'online',
   },
   {
     icon: Database,
-    title: 'PostgreSQL HA',
-    desc: 'Primary-standby setup with streaming replication for zero data loss.',
+    title: 'PostgreSQL Database',
+    desc: 'Database utama dan cadangan dengan sinkronisasi otomatis.',
     color: 'from-blue-500 to-cyan-600',
-    status: 'online',
   },
   {
     icon: Shield,
     title: 'Auto Failover',
-    desc: 'Automatic failover with Patroni/pg_auto_failover for seamless recovery.',
+    desc: 'Sistem otomatis mengganti server ketika terjadi gangguan.',
     color: 'from-emerald-500 to-teal-600',
-    status: 'online',
   },
   {
     icon: Server,
-    title: 'NGINX LB',
-    desc: 'Load balancer distributing traffic across multiple backend instances.',
+    title: 'Load Balancer',
+    desc: 'Membagi trafik ke beberapa backend agar sistem tetap stabil.',
     color: 'from-orange-500 to-amber-600',
-    status: 'online',
   },
   {
     icon: Activity,
-    title: 'Monitoring',
-    desc: 'Real-time metrics, alerts, and system health dashboard with Prometheus.',
+    title: 'Monitoring System',
+    desc: 'Pemantauan sistem secara real-time.',
     color: 'from-pink-500 to-rose-600',
-    status: 'online',
   },
   {
     icon: Layers,
-    title: 'Docker Stack',
-    desc: 'Containerized microservices with Docker Compose orchestration.',
+    title: 'Docker Container',
+    desc: 'Seluruh layanan berjalan menggunakan container Docker.',
     color: 'from-cyan-500 to-blue-600',
-    status: 'online',
   },
 ];
 
 const dbFeatures = [
   {
-    title: 'Streaming Replication',
-    desc: 'Continuous WAL streaming from primary to standby nodes',
+    title: 'Replikasi Streaming',
+    desc: 'Sinkronisasi data otomatis dari database utama ke cadangan.',
   },
   {
-    title: 'Auto Failover',
-    desc: 'Automatic leader election with sub-second detection',
+    title: 'Perpindahan Otomatis',
+    desc: 'Pergantian server otomatis dengan deteksi cepat.',
   },
   {
-    title: 'Connection Pooling',
-    desc: 'PgBouncer for efficient connection management',
+    title: 'Pengelolaan Koneksi',
+    desc: 'Manajemen koneksi database lebih efisien.',
   },
   {
-    title: 'Point-in-Time Recovery',
-    desc: 'Full PITR capability with WAL archiving',
+    title: 'Pemulihan Data',
+    desc: 'Pemulihan database berdasarkan waktu tertentu.',
   },
   {
-    title: 'Read Replicas',
-    desc: 'Scale read operations across multiple standbys',
+    title: 'Server Pembaca',
+    desc: 'Membagi proses pembacaan data ke beberapa server.',
   },
   {
-    title: 'Health Monitoring',
-    desc: 'Continuous health checks with automatic intervention',
+    title: 'Pemantauan Kesehatan',
+    desc: 'Pemeriksaan kesehatan sistem secara terus menerus.',
   },
 ];
 
@@ -93,9 +87,7 @@ export default function Home() {
   const [dbStatus, setDbStatus] = useState({
     primaryNode: 'db-primary',
     standbyNode: 'db-replica',
-    primaryStatus: 'online',
-    standbyStatus: 'online',
-    replication: 'active',
+    replication: 'aktif',
   });
 
   useEffect(() => {
@@ -105,48 +97,18 @@ export default function Home() {
 
         setSysStats(res.data);
 
-        /*
-          contoh response backend:
-
-          {
-            primary: "db-primary",
-            standby: "db-replica",
-            replication: "active",
-            primaryStatus: "online",
-            standbyStatus: "online"
-          }
-
-          saat failover:
-
-          {
-            primary: "db-replica",
-            standby: "db-primary",
-            replication: "active",
-            primaryStatus: "online",
-            standbyStatus: "online"
-          }
-        */
-
         setDbStatus({
           primaryNode: res.data.primary || 'db-primary',
           standbyNode: res.data.standby || 'db-replica',
-          primaryStatus: res.data.primaryStatus || 'online',
-          standbyStatus: res.data.standbyStatus || 'online',
-          replication: res.data.replication || 'active',
+          replication: res.data.replication || 'aktif',
         });
       } catch (error) {
         console.log(error);
-
-        setDbStatus((prev) => ({
-          ...prev,
-          primaryStatus: 'offline',
-        }));
       }
     };
 
     fetchStats();
 
-    // auto refresh tiap 3 detik
     const interval = setInterval(fetchStats, 3000);
 
     return () => clearInterval(interval);
@@ -156,7 +118,7 @@ export default function Home() {
     <div className="gradient-bg min-h-screen">
       <HeroSection />
 
-      {/* Architecture */}
+      {/* Arsitektur */}
       <section className="py-24 px-4 sm:px-6 max-w-7xl mx-auto">
         <motion.div
           initial={{ opacity: 0, y: 30 }}
@@ -166,23 +128,22 @@ export default function Home() {
           className="text-center mb-14"
         >
           <span className="text-xs font-semibold tracking-widest text-purple-400 uppercase mb-3 block">
-            Architecture
+            Arsitektur
           </span>
 
           <h2 className="text-3xl sm:text-4xl font-bold text-white mb-4">
-            Enterprise{' '}
-            <span className="gradient-text">Microservice</span> Stack
+            Sistem <span className="gradient-text">Microservice</span>
           </h2>
 
           <p className="text-white/50 max-w-xl mx-auto">
-            Built on battle-tested infrastructure with high availability,
-            auto-scaling, and zero-downtime deployments.
+            Dibangun menggunakan infrastruktur modern dengan performa tinggi,
+            stabil, dan mendukung sistem berjalan tanpa gangguan.
           </p>
         </motion.div>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
           {microservices.map(
-            ({ icon: Icon, title, desc, color, status }, i) => (
+            ({ icon: Icon, title, desc, color }, i) => (
               <motion.div
                 key={i}
                 initial={{ opacity: 0, y: 30 }}
@@ -192,17 +153,12 @@ export default function Home() {
                 whileHover={{ scale: 1.02, y: -4 }}
                 className="glass rounded-2xl p-6 border border-white/5 card-hover"
               >
-                <div className="flex items-start justify-between mb-4">
+                <div className="mb-4">
                   <div
                     className={`w-12 h-12 rounded-2xl bg-gradient-to-br ${color} flex items-center justify-center shadow-lg`}
                   >
                     <Icon className="w-6 h-6 text-white" />
                   </div>
-
-                  <span className="badge-online text-xs px-2.5 py-1 rounded-full flex items-center gap-1">
-                    <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 pulse-glow" />
-                    {status}
-                  </span>
                 </div>
 
                 <h3 className="text-base font-bold text-white mb-2">
@@ -218,7 +174,7 @@ export default function Home() {
         </div>
       </section>
 
-      {/* PostgreSQL HA */}
+      {/* Database PostgreSQL */}
       <section className="py-24 px-4 sm:px-6 max-w-7xl mx-auto">
         <div className="glass rounded-3xl border border-blue-500/10 p-8 sm:p-12 overflow-hidden relative">
           <div
@@ -238,44 +194,36 @@ export default function Home() {
                 transition={{ duration: 0.6 }}
               >
                 <span className="text-xs font-semibold tracking-widest text-blue-400 uppercase mb-3 block">
-                  High Availability
+                  Database
                 </span>
 
                 <h2 className="text-3xl sm:text-4xl font-bold text-white mb-4">
-                  PostgreSQL{' '}
+                  Database PostgreSQL{' '}
                   <span className="gradient-text">
-                    High Availability
-                  </span>{' '}
-                  Database
+                    Ketersediaan Tinggi
+                  </span>
                 </h2>
 
                 <p className="text-white/50 mb-8 leading-relaxed">
-                  Automatic failover with real-time replication between
-                  PostgreSQL nodes.
+                  Sistem database dengan sinkronisasi otomatis antar server
+                  untuk menjaga kestabilan data.
                 </p>
 
-                {/* DATABASE STATUS */}
                 <div className="space-y-3 mb-8">
                   {[
                     {
-                      label: `${dbStatus.primaryNode} (PRIMARY)`,
-                      status: dbStatus.primaryStatus,
+                      label: `${dbStatus.primaryNode} (UTAMA)`,
                       detail: 'Port :5432',
                     },
                     {
-                      label: `${dbStatus.standbyNode} (REPLICA)`,
-                      status: dbStatus.standbyStatus,
+                      label: `${dbStatus.standbyNode} (CADANGAN)`,
                       detail: 'Port :5433',
                     },
                     {
-                      label: 'Replication',
-                      status:
-                        dbStatus.replication === 'active'
-                          ? 'online'
-                          : 'offline',
-                      detail: 'Streaming WAL · Real-time sync',
+                      label: 'Replikasi',
+                      detail: 'Sinkronisasi data secara real-time',
                     },
-                  ].map(({ label, status, detail }) => (
+                  ].map(({ label, detail }) => (
                     <div
                       key={label}
                       className="flex items-center justify-between glass rounded-xl p-3 border border-white/5"
@@ -289,26 +237,6 @@ export default function Home() {
                           {detail}
                         </p>
                       </div>
-
-                      <span
-                        className={`text-xs px-2.5 py-1 rounded-full font-medium flex items-center gap-1 ${
-                          status === 'online'
-                            ? 'badge-online'
-                            : 'badge-offline'
-                        }`}
-                      >
-                        <span
-                          className={`w-1.5 h-1.5 rounded-full ${
-                            status === 'online'
-                              ? 'bg-emerald-400 pulse-glow'
-                              : 'bg-red-400'
-                          }`}
-                        />
-
-                        {status === 'online'
-                          ? 'Active'
-                          : 'Inactive'}
-                      </span>
                     </div>
                   ))}
                 </div>
@@ -319,7 +247,7 @@ export default function Home() {
                     whileTap={{ scale: 0.97 }}
                     className="btn-primary px-6 py-3 rounded-xl font-semibold flex items-center gap-2 shadow-lg shadow-purple-500/20"
                   >
-                    View Live Dashboard
+                    Lihat Dashboard
                     <ChevronRight className="w-4 h-4" />
                   </motion.button>
                 </Link>

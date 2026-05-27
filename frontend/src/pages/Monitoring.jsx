@@ -40,50 +40,6 @@ import MonitoringCard from '../components/MonitoringCard';
 import { useToast } from '../components/Toast';
 
 /* =========================================================
-   DEMO DATA
-   ========================================================= */
-const demoStats = {
-  total_users: 248,
-  total_menu: 34,
-  total_orders: 1847,
-  total_payments: 1623,
-  total_revenue: 89540000,
-  low_stock_items: 4,
-};
-
-const demoOrders = Array.from({ length: 8 }, (_, i) => ({
-  id: 1847 - i,
-  user_id: Math.floor(Math.random() * 50) + 1,
-  total: Math.floor(Math.random() * 150000) + 25000,
-  status: ['pending', 'processing', 'completed'][Math.floor(Math.random() * 3)],
-  created_at: new Date(Date.now() - i * 3600000).toISOString(),
-}));
-
-const demoPayments = Array.from({ length: 6 }, (_, i) => ({
-  id: 1623 - i,
-  order_id: 1847 - i,
-  amount: Math.floor(Math.random() * 150000) + 25000,
-  payment_method: ['qris', 'cash', 'debit'][Math.floor(Math.random() * 3)],
-  status: 'success',
-  created_at: new Date(Date.now() - i * 3600000).toISOString(),
-}));
-
-const demoLogs = [
-  {
-    id: 1,
-    level: 'info',
-    message: 'API Gateway healthy',
-    timestamp: new Date().toISOString(),
-  },
-];
-
-const chartData = Array.from({ length: 7 }, (_, i) => ({
-  day: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'][i],
-  orders: Math.floor(Math.random() * 100) + 150,
-  payments: Math.floor(Math.random() * 90) + 120,
-}));
-
-/* =========================================================
    STATUS COLORS
    ========================================================= */
 const statusColors = {
@@ -138,10 +94,10 @@ export default function Monitoring() {
   const [loading, setLoading] = useState(true);
   const [lastRefresh, setLastRefresh] = useState(new Date());
   const [activeTab, setActiveTab] = useState('overview');
-  const [stats, setStats] = useState(demoStats);
-  const [orders, setOrders] = useState(demoOrders);
-  const [payments, setPayments] = useState(demoPayments);
-  const [logs, setLogs] = useState(demoLogs);
+const [stats, setStats] = useState({});
+const [orders, setOrders] = useState([]);
+const [payments, setPayments] = useState([]);
+const [logs, setLogs] = useState([]);
   const [dbStatus, setDbStatus] = useState({
     primary: { host: '10.95.249.151', port: 5432, status: 'online', role: 'primary' },
     replica: { host: '10.95.249.152', port: 5433, status: 'online', role: 'standby' },
@@ -167,14 +123,14 @@ export default function Monitoring() {
 
       /* STATS */
       if (statsRes.status === 'fulfilled') {
-        setStats(statsRes.value?.data || demoStats);
+setStats(statsRes.value?.data || {});
       }
 
       /* ORDERS */
       if (ordersRes.status === 'fulfilled') {
         const orderData = ordersRes.value?.data;
         setOrders(
-          Array.isArray(orderData) ? orderData : orderData?.data || demoOrders
+Array.isArray(orderData) ? orderData : orderData?.data || []
         );
       }
 
@@ -182,7 +138,7 @@ export default function Monitoring() {
       if (paymentsRes.status === 'fulfilled') {
         const paymentData = paymentsRes.value?.data;
         setPayments(
-          Array.isArray(paymentData) ? paymentData : paymentData?.data || demoPayments
+Array.isArray(paymentData) ? paymentData : paymentData?.data || []
         );
       }
 
@@ -196,7 +152,7 @@ export default function Monitoring() {
               message: log.message,
               timestamp: log.created_at || log.timestamp,
             }))
-          : demoLogs;
+: [];
         setLogs(mappedLogs);
       }
 

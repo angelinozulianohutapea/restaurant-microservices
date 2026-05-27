@@ -111,14 +111,14 @@ app.put('/menu/:id', async (req, res) => {
 });
 
 // =====================================
-// DELETE MENU (soft delete)
+// DELETE MENU (hard delete)
 // =====================================
 app.delete('/menu/:id', async (req, res) => {
   try {
     const { id } = req.params;
 
     const result = await primaryDB.query(
-      `UPDATE menus SET status = 'unavailable' WHERE id = $1 RETURNING *`,
+      `DELETE FROM menus WHERE id = $1 RETURNING *`,
       [id]
     );
 
