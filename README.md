@@ -1,4 +1,4 @@
-# 🍽️ Restaurant Microservices Platform
+# 🍽️ Platform Microservices Restoran
 
 <p align="center">
   <img src="https://img.shields.io/badge/Architecture-Microservices-blue?style=for-the-badge&logo=docker" />
@@ -10,156 +10,197 @@
 </p>
 
 <p align="center">
-  <img src="https://img.shields.io/badge/Status-Active-brightgreen?style=flat-square" />
-  <img src="https://img.shields.io/badge/License-MIT-yellow?style=flat-square" />
-  <img src="https://img.shields.io/badge/Version-1.0.0-blue?style=flat-square" />
-  <img src="https://img.shields.io/badge/Node.js-%3E%3D18-339933?style=flat-square&logo=node.js" />
-</p>
-
-<p align="center">
-  <b>Platform manajemen restoran terdistribusi yang dibangun menggunakan arsitektur Microservices,</b><br/>
-  <b>API Gateway routing, Nginx reverse proxy, Docker containerization, dan realtime monitoring.</b>
+  Platform manajemen restoran terdistribusi menggunakan Arsitektur Microservices,<br/>
+  routing API Gateway, reverse proxy Nginx, kontainerisasi Docker, dan monitoring realtime.
 </p>
 
 ---
 
 ## 📌 Daftar Isi
 
-- [Gambaran Umum](#-gambaran-umum)
-- [Arsitektur Sistem](#-arsitektur-sistem)
-- [Daftar Layanan](#-daftar-layanan)
-- [Tech Stack](#-tech-stack)
-- [Struktur Proyek](#-struktur-proyek)
-- [Fitur Aplikasi](#-fitur-aplikasi)
-- [Instalasi & Menjalankan](#-instalasi--menjalankan)
-- [Akses Aplikasi](#-akses-aplikasi)
-- [API Endpoints](#-api-endpoints)
-- [Health Check](#-health-check)
-- [Docker Commands](#-docker-commands)
-- [Skalabilitas](#-skalabilitas)
-- [Roadmap](#-roadmap)
-- [Author](#-author)
+* [Gambaran Umum](#-gambaran-umum)
+* [Apa itu Microservices?](#-apa-itu-microservices)
+* [Arsitektur Sistem](#-arsitektur-sistem)
+* [Daftar Layanan](#-daftar-layanan)
+* [Teknologi yang Digunakan](#-teknologi-yang-digunakan)
+* [Struktur Proyek](#-struktur-proyek)
+* [Fitur-Fitur](#-fitur-fitur)
+* [Panduan Instalasi](#-panduan-instalasi)
+* [Cara Menjalankan Proyek](#-cara-menjalankan-proyek)
+* [Akses Aplikasi](#-akses-aplikasi)
+* [Endpoint API](#-endpoint-api)
+* [Perintah Docker](#-perintah-docker)
+* [Konsep Skalabilitas](#-konsep-skalabilitas)
+* [Roadmap Pengembangan](#-roadmap-pengembangan)
+* [Troubleshooting](#-troubleshooting)
+* [Kontributor](#-kontributor)
+* [Lisensi](#-lisensi)
 
 ---
 
 ## ✨ Gambaran Umum
 
-**Restaurant Microservices Platform** adalah sistem terdistribusi yang dirancang untuk mensimulasikan ekosistem restoran yang skalabel menggunakan prinsip-prinsip arsitektur cloud-native modern.
+**Platform Microservices Restoran** adalah sistem terdistribusi yang dirancang untuk mensimulasikan ekosistem restoran yang dapat diskalakan menggunakan prinsip-prinsip arsitektur cloud-native modern.
 
-> 💡 **Apa itu Microservices?**
-> Microservices adalah pendekatan arsitektur perangkat lunak di mana aplikasi dibangun sebagai kumpulan layanan kecil yang independen. Setiap layanan menjalankan proses tersendiri dan berkomunikasi melalui API. Berbeda dengan arsitektur monolitik yang menggabungkan semua fungsi dalam satu aplikasi besar.
+Aplikasi ini dipisahkan menjadi layanan-layanan independen sehingga setiap komponen dapat dikembangkan, di-deploy, dan diskalakan secara terpisah tanpa mengganggu layanan lainnya.
 
 ### 🎯 Tujuan Utama Proyek
 
 | Tujuan | Keterangan |
 |--------|------------|
-| 🏗️ Arsitektur Modular | Memisahkan setiap domain bisnis menjadi layanan yang mandiri |
-| 📦 Containerisasi | Mengemas setiap layanan dalam Docker container yang portabel |
-| 🔀 API Gateway | Memusatkan semua routing request ke satu pintu masuk |
-| 📊 Monitoring | Memantau kesehatan dan performa setiap layanan secara realtime |
-| ⚡ Skalabilitas | Memungkinkan scaling horizontal pada layanan tertentu saja |
-| 🔧 Maintainability | Mempermudah pengembangan dan pemeliharaan tiap layanan secara terpisah |
+| **Modularitas** | Membangun arsitektur backend yang terpisah-pisah berdasarkan domain bisnis |
+| **Skalabilitas** | Kemampuan untuk menambah kapasitas sistem dengan mudah |
+| **Maintainability** | Memudahkan pemeliharaan kode karena setiap service terpisah |
+| **Teknologi Modern** | Menggunakan Docker, API Gateway, dan Nginx |
+| **Monitoring** | Menyediakan pemantauan infrastruktur secara real-time |
+
+---
+
+## 🧩 Apa itu Microservices?
+
+### Penjelasan Sederhana
+
+Bayangkan sebuah restoran besar yang memiliki:
+- **Dapur** → Menu Service
+- **Kasir** → Payment Service  
+- **Pelayan** → Order Service
+- **Manager** → User Service
+- **Supervisor** → Monitoring Service
+
+Setiap bagian bekerja **secara independen** tetapi **saling berkomunikasi** untuk menjalankan restoran dengan baik.
+
+### Keuntungan Microservices
+
+✅ **Isolasi Kesalahan** - Jika satu service error, yang lain tetap jalan  
+✅ **Pengembangan Paralel** - Tim berbeda bisa kerjakan service berbeda  
+✅ **Skalabilitas Fleksibel** - Hanya scale service yang membutuhkan  
+✅ **Teknologi Beragam** - Setiap service bisa pakai bahasa berbeda  
+✅ **Deploy Independen** - Update satu service tanpa ganggu yang lain  
+
+### Perbandingan dengan Monolith
+
+| Aspek | Monolith | Microservices |
+|-------|----------|---------------|
+| **Struktur** | Satu aplikasi besar | Banyak aplikasi kecil |
+| **Deployment** | Deploy semua sekaligus | Deploy per service |
+| **Scaling** | Scale seluruh aplikasi | Scale service tertentu |
+| **Technology** | Satu tech stack | Bisa beda-beda |
+| **Complexity** | Simpel di awal | Kompleks di awal |
+| **Maintenance** | Sulit saat besar | Lebih mudah |
 
 ---
 
 ## 🧠 Arsitektur Sistem
 
+### Diagram Alur
+
 ```mermaid
-flowchart LR
-    A[👤 Frontend Client\nReact + Vite] --> B[🔀 Nginx\nReverse Proxy :80]
-    B --> C[🚪 API Gateway\n:8080]
-
-    C --> D[👥 User Service\n:3000]
-    C --> E[🍽️ Menu Service\n:3002]
-    C --> F[💳 Payment Service\n:3003]
-    C --> G[📊 Monitoring Service\n:3004]
-    C --> H[📦 Order Service 1\n:3001]
-    C --> I[📦 Order Service 2\n:3005]
-
-    style A fill:#61DAFB,color:#000
-    style B fill:#009639,color:#fff
-    style C fill:#FF6B35,color:#fff
-    style D fill:#339933,color:#fff
-    style E fill:#339933,color:#fff
-    style F fill:#339933,color:#fff
-    style G fill:#339933,color:#fff
-    style H fill:#339933,color:#fff
-    style I fill:#339933,color:#fff
+flowchart TB
+    Client[👤 Pengguna/Browser]
+    
+    subgraph "Entry Point"
+        Nginx[🔒 Nginx Reverse Proxy<br/>Port 80]
+    end
+    
+    subgraph "API Layer"
+        Gateway[🚪 API Gateway<br/>Port 8080]
+    end
+    
+    subgraph "Frontend Layer"
+        Frontend[⚛️ React Frontend<br/>Port 5000]
+    end
+    
+    subgraph "Microservices Layer"
+        User[👥 User Service<br/>Port 3000]
+        Menu[📋 Menu Service<br/>Port 3002]
+        Order1[📦 Order Service 1<br/>Port 3001]
+        Order2[📦 Order Service 2<br/>Port 3005]
+        Payment[💳 Payment Service<br/>Port 3003]
+        Monitor[📊 Monitoring Service<br/>Port 3004]
+    end
+    
+    Client --> Nginx
+    Nginx --> Frontend
+    Nginx --> Gateway
+    
+    Gateway --> User
+    Gateway --> Menu
+    Gateway --> Order1
+    Gateway --> Order2
+    Gateway --> Payment
+    Gateway --> Monitor
+    
+    style Nginx fill:#009639,color:#fff
+    style Gateway fill:#ff6b35,color:#fff
+    style Frontend fill:#61DAFB,color:#000
+    style User fill:#4CAF50,color:#fff
+    style Menu fill:#2196F3,color:#fff
+    style Order1 fill:#FF9800,color:#fff
+    style Order2 fill:#FF9800,color:#fff
+    style Payment fill:#9C27B0,color:#fff
+    style Monitor fill:#F44336,color:#fff
 ```
 
-### 🔍 Penjelasan Alur Sistem
+### 📝 Penjelasan Komponen
 
-```
-Pengguna → Nginx → API Gateway → Layanan Tujuan
-   │           │         │              │
-   │      (Port 80)  (Port 8080)   (Port 3000-3005)
-   │           │         │              │
-   └───────────┴─────────┴──────────────┘
-              Satu jalur komunikasi terpusat
-```
-
-1. **Pengguna** membuka aplikasi melalui browser
-2. **Nginx** menerima semua request masuk sebagai reverse proxy (pintu gerbang utama)
-3. **API Gateway** meneruskan request ke layanan yang sesuai berdasarkan path URL
-4. **Layanan Backend** memproses request dan mengembalikan response
-
-### 🏛️ Komponen Utama
-
-| Komponen | Fungsi | Keuntungan |
-|----------|--------|------------|
-| **Nginx** | Reverse proxy sebagai entry point tunggal | Keamanan, load balancing, SSL termination |
-| **API Gateway** | Routing request ke layanan yang tepat | Centralized control, rate limiting |
-| **Frontend** | Antarmuka pengguna berbasis React | UI responsif dan interaktif |
-| **Order Cluster** | Dua instance order service aktif | Redundansi dan high availability |
-| **Monitoring** | Pemantauan kesehatan sistem | Deteksi masalah secara real-time |
-| **Docker Compose** | Orkestrasi semua container | Deployment mudah dan konsisten |
+| Komponen | Fungsi | Analogi |
+|----------|--------|---------|
+| **Nginx** | Reverse proxy yang menerima semua request dari luar | Satpam depan restoran |
+| **API Gateway** | Routing request ke service yang tepat | Resepsionis yang arahkan tamu |
+| **Frontend** | Antarmuka pengguna berbasis React | Menu digital untuk pelanggan |
+| **User Service** | Kelola data pengguna, login, registrasi | Bagian membership |
+| **Menu Service** | Kelola menu makanan dan minuman | Bagian dapur untuk daftar menu |
+| **Order Service** | Proses pesanan (ada 2 instance untuk load balancing) | Pelayan yang terima pesanan |
+| **Payment Service** | Proses pembayaran | Kasir |
+| **Monitoring** | Pantau kesehatan semua service | Manager yang awasi semua |
 
 ---
 
 ## 🚀 Daftar Layanan
 
-| Layanan | Deskripsi | Port | Status |
-|---------|-----------|------|--------|
-| 🖥️ **Frontend** | Aplikasi utama pelanggan berbasis React | `5000` | ✅ Aktif |
-| 🚪 **API Gateway** | Pusat routing semua request | `8080` | ✅ Aktif |
-| 👥 **User Service** | Manajemen data pengguna | `3000` | ✅ Aktif |
-| 🍽️ **Menu Service** | Manajemen menu restoran | `3002` | ✅ Aktif |
-| 📦 **Order Service 1** | Instance pertama pemrosesan pesanan | `3001` | ✅ Aktif |
-| 📦 **Order Service 2** | Instance kedua pemrosesan pesanan (replika) | `3005` | ✅ Aktif |
-| 💳 **Payment Service** | Pemrosesan pembayaran | `3003` | ✅ Aktif |
-| 📊 **Monitoring Service** | Pemantauan sistem dan kesehatan layanan | `3004` | ✅ Aktif |
-| 🔀 **Nginx** | Reverse proxy dan load balancer | `80` | ✅ Aktif |
+### Tabel Detail Service
+
+| Nama Service | Port | Deskripsi Lengkap | Status |
+|--------------|------|-------------------|--------|
+| **Frontend** | `5000` | Aplikasi React untuk customer, menggunakan Vite + TypeScript | ✅ Production |
+| **API Gateway** | `8080` | Pintu masuk semua request API, routing ke service terkait | ✅ Production |
+| **User Service** | `3000` | Manajemen user, autentikasi, profil | ✅ Production |
+| **Menu Service** | `3002` | CRUD menu makanan, kategori, harga | ✅ Production |
+| **Order Service 1** | `3001` | Instance pertama untuk proses pesanan | ✅ Production |
+| **Order Service 2** | `3005` | Instance kedua untuk load balancing | ✅ Production |
+| **Payment Service** | `3003` | Proses pembayaran, invoice, history | ✅ Production |
+| **Monitoring** | `3004` | Health check, metrics, status semua service | ✅ Production |
+| **Nginx** | `80` | Reverse proxy dan load balancer | ✅ Production |
 
 ---
 
-## 🛠️ Tech Stack
+## 🛠️ Teknologi yang Digunakan
 
-### 🎨 Frontend
+### Frontend Stack
 
-| Teknologi | Kegunaan |
-|-----------|----------|
-| **React** | Library UI untuk membangun antarmuka pengguna yang interaktif |
-| **Vite** | Build tool super cepat untuk pengembangan React |
-| **TypeScript** | Superset JavaScript dengan static typing untuk kode yang lebih aman |
-| **TailwindCSS** | Framework CSS utility-first untuk styling yang efisien |
-| **Axios** | HTTP client untuk komunikasi dengan API backend |
+| Teknologi | Versi | Kegunaan |
+|-----------|-------|----------|
+| **React** | 18.x | Library UI untuk membangun interface |
+| **Vite** | 5.x | Build tool yang super cepat |
+| **TypeScript** | 5.x | Superset JavaScript dengan type safety |
+| **TailwindCSS** | 3.x | Utility-first CSS framework |
+| **Axios** | 1.x | HTTP client untuk konsumsi API |
 
-### ⚙️ Backend
+### Backend Stack
 
-| Teknologi | Kegunaan |
-|-----------|----------|
-| **Node.js** | Runtime JavaScript untuk membangun server-side application |
-| **Express.js** | Framework web minimalis untuk membuat REST API |
-| **REST API** | Standar komunikasi antar layanan menggunakan HTTP |
+| Teknologi | Versi | Kegunaan |
+|-----------|-------|----------|
+| **Node.js** | 18+ | Runtime JavaScript di server |
+| **Express.js** | 4.x | Framework web minimalis dan fleksibel |
+| **REST API** | - | Arsitektur API untuk komunikasi |
 
-### 🏗️ Infrastruktur
+### Infrastructure & DevOps
 
-| Teknologi | Kegunaan |
-|-----------|----------|
-| **Docker** | Platform containerisasi untuk mengemas aplikasi beserta dependensinya |
-| **Docker Compose** | Tool untuk mendefinisikan dan menjalankan multi-container Docker |
-| **Nginx** | Web server dan reverse proxy berperforma tinggi |
-| **Microservices** | Pola arsitektur untuk memecah aplikasi menjadi layanan-layanan kecil |
+| Teknologi | Versi | Kegunaan |
+|-----------|-------|----------|
+| **Docker** | Latest | Kontainerisasi aplikasi |
+| **Docker Compose** | Latest | Orkestrasi multi-container |
+| **Nginx** | Latest | Reverse proxy dan load balancer |
 
 ---
 
@@ -168,96 +209,128 @@ Pengguna → Nginx → API Gateway → Layanan Tujuan
 ```bash
 restaurant-microservices-main/
 │
-├── 📁 frontend/              # Aplikasi React (UI Pelanggan)
+├── 📁 frontend/                 # Aplikasi React
+│   ├── src/
+│   ├── public/
+│   ├── package.json
+│   ├── Dockerfile
+│   └── vite.config.ts
+│
+├── 📁 gateway/                  # API Gateway
 │   ├── src/
 │   ├── package.json
 │   └── Dockerfile
 │
-├── 📁 gateway/               # API Gateway (Routing Pusat)
-│   ├── index.js
+├── 📁 user/                     # User Service
+│   ├── src/
+│   │   └── index.js
 │   ├── package.json
 │   └── Dockerfile
 │
-├── 📁 user/                  # User Service (Manajemen Pengguna)
-│   ├── index.js
+├── 📁 menu/                     # Menu Service
+│   ├── src/
 │   ├── package.json
 │   └── Dockerfile
 │
-├── 📁 menu/                  # Menu Service (Manajemen Menu)
-│   ├── index.js
+├── 📁 payment/                  # Payment Service
+│   ├── src/
 │   ├── package.json
 │   └── Dockerfile
 │
-├── 📁 order-service-1/       # Order Service Instance 1
-│   ├── index.js
+├── 📁 monitoring/               # Monitoring Service
+│   ├── src/
 │   ├── package.json
 │   └── Dockerfile
 │
-├── 📁 order-service-2/       # Order Service Instance 2 (Replika)
-│   ├── index.js
+├── 📁 order-service-1/          # Order Service Instance 1
+│   ├── src/
 │   ├── package.json
 │   └── Dockerfile
 │
-├── 📁 payment/               # Payment Service (Pembayaran)
-│   ├── index.js
+├── 📁 order-service-2/          # Order Service Instance 2
+│   ├── src/
 │   ├── package.json
 │   └── Dockerfile
 │
-├── 📁 monitoring/            # Monitoring Service (Pemantauan)
-│   ├── index.js
-│   ├── package.json
+├── 📁 nginx/                    # Konfigurasi Nginx
+│   ├── nginx.conf
 │   └── Dockerfile
 │
-├── 📁 nginx/                 # Konfigurasi Nginx Reverse Proxy
-│   └── nginx.conf
-│
-├── 📄 docker-compose.yml     # Orkestrasi semua container
-└── 📄 README.md
+├── 📄 docker-compose.yml        # Orkestrasi semua container
+├── 📄 .gitignore
+└── 📄 README.md                 # Dokumentasi (file ini)
 ```
 
----
+### Penjelasan Struktur
 
-## 🔥 Fitur Aplikasi
+#### 🔹 `frontend/`
+Berisi aplikasi React yang menjadi tampilan untuk pengguna akhir.
 
-### ✅ Fitur yang Sudah Tersedia
+#### 🔹 `gateway/`
+Service yang menerima semua request dari frontend dan meneruskannya ke service yang tepat.
 
-| Fitur | Keterangan |
-|-------|------------|
-| ✅ **Microservices Architecture** | Setiap domain bisnis dipisah menjadi layanan independen |
-| ✅ **API Gateway Routing** | Semua request dikelola melalui satu gateway terpusat |
-| ✅ **Docker Containerization** | Semua layanan berjalan dalam container yang terisolasi |
-| ✅ **Nginx Reverse Proxy** | Entry point tunggal yang aman untuk semua traffic |
-| ✅ **Monitoring Service** | Pemantauan kesehatan dan status semua layanan |
-| ✅ **Order Service Cluster** | Dua instance order service untuk high availability |
-| ✅ **Frontend Integration** | UI lengkap yang terintegrasi dengan semua layanan backend |
-| ✅ **Health Check Endpoints** | Setiap layanan memiliki endpoint untuk pengecekan kesehatan |
+#### 🔹 `user/`, `menu/`, `payment/`, `monitoring/`, `order-service-1/`, `order-service-2/`
+Masing-masing adalah microservice independen dengan tanggung jawab spesifik.
 
-### 🔄 Dalam Pengembangan
+#### 🔹 `nginx/`
+Konfigurasi reverse proxy untuk routing HTTP.
 
-| Fitur | Keterangan |
-|-------|------------|
-| 🔄 **Manajemen Stok** | Sistem pengelolaan inventaris bahan makanan |
-| 🔄 **Integrasi Database** | Koneksi ke PostgreSQL untuk penyimpanan data persisten |
-| 🔄 **JWT Authentication** | Sistem autentikasi berbasis token yang aman |
-| 🔄 **Dashboard Monitoring** | Tampilan visual yang lebih lengkap untuk monitoring |
-| 🔄 **Sistem Analitik** | Laporan dan statistik transaksi restoran |
+#### 🔹 `docker-compose.yml`
+File konfigurasi untuk menjalankan semua service sekaligus dengan satu perintah.
 
 ---
 
-## ⚙️ Instalasi & Menjalankan
+## 🔥 Fitur-Fitur
 
-### 📋 Prasyarat
+### ✅ Fitur yang Sudah Diimplementasikan
 
-Pastikan software berikut sudah terinstal di komputer Anda:
+| Fitur | Status | Deskripsi |
+|-------|--------|-----------|
+| Arsitektur Microservices | ✅ | Pemisahan service berdasarkan domain |
+| API Gateway Routing | ✅ | Routing otomatis ke service terkait |
+| Docker Containerization | ✅ | Semua service berjalan di container |
+| Nginx Reverse Proxy | ✅ | Load balancing dan routing HTTP |
+| Monitoring Service | ✅ | Health check semua service |
+| Multiple Order Instances | ✅ | 2 instance order service untuk high availability |
+| Frontend Integration | ✅ | React app terintegrasi dengan backend |
+| Health Check Endpoints | ✅ | Setiap service punya endpoint `/health` |
 
-| Software | Versi Minimum | Download |
-|----------|---------------|----------|
-| **Docker** | Latest | [docker.com](https://www.docker.com) |
-| **Docker Compose** | Latest | Sudah termasuk dalam Docker Desktop |
-| **Node.js** | >= 18 | [nodejs.org](https://nodejs.org) |
-| **Git** | Latest | [git-scm.com](https://git-scm.com) |
+### 🔄 Fitur dalam Pengembangan
 
-### 🔍 Cara Mengecek Apakah Software Sudah Terinstal
+| Fitur | Status | Target |
+|-------|--------|--------|
+| Stock Management | 🔄 | Kelola stok bahan makanan |
+| Database Integration | 🔄 | PostgreSQL untuk persistent data |
+| JWT Authentication | 🔄 | Keamanan dengan token |
+| Admin Dashboard | 🔄 | Panel admin untuk monitoring |
+| Analytics System | 🔄 | Laporan penjualan dan statistik |
+
+### 📋 Fitur Rencana Masa Depan
+
+| Fitur | Status | Deskripsi |
+|-------|--------|-----------|
+| Redis Caching | 📋 | Cache untuk performa lebih cepat |
+| Kubernetes | 📋 | Deployment ke K8s |
+| CI/CD Pipeline | 📋 | Otomasi testing dan deployment |
+| Prometheus & Grafana | 📋 | Monitoring dan visualisasi metrics |
+| Auto Scaling | 📋 | Otomatis scale berdasarkan load |
+
+---
+
+## ⚙️ Panduan Instalasi
+
+### Prasyarat yang Harus Diinstall
+
+Pastikan komputer Anda sudah terinstall software berikut:
+
+| Software | Versi Minimum | Link Download |
+|----------|---------------|---------------|
+| **Docker** | Latest | [Download Docker](https://www.docker.com/get-started) |
+| **Docker Compose** | Latest | [Download Docker Compose](https://docs.docker.com/compose/install/) |
+| **Node.js** | 18.x atau lebih | [Download Node.js](https://nodejs.org/) |
+| **Git** | Latest | [Download Git](https://git-scm.com/) |
+
+### Cara Cek Versi
 
 ```bash
 # Cek versi Docker
@@ -275,322 +348,780 @@ git --version
 
 ---
 
-### 📥 Langkah 1 — Clone Repository
+### 📥 Langkah-Langkah Instalasi
 
-Clone repository ini ke komputer lokal Anda:
+#### **Langkah 1: Clone Repository**
+
+Buka terminal/command prompt, lalu jalankan:
 
 ```bash
 git clone https://github.com/your-username/restaurant-microservices.git
 ```
 
-> 💡 **Clone** berarti menyalin seluruh kode dari repository GitHub ke komputer Anda.
+> 💡 **Catatan**: Ganti `your-username` dengan username GitHub Anda yang sebenarnya.
 
----
-
-### 📁 Langkah 2 — Masuk ke Folder Proyek
+#### **Langkah 2: Masuk ke Folder Proyek**
 
 ```bash
 cd restaurant-microservices-main
 ```
 
+#### **Langkah 3: Verifikasi Struktur File**
+
+Pastikan semua folder ada dengan perintah:
+
+```bash
+# Untuk Windows
+dir
+
+# Untuk Linux/Mac
+ls -la
+```
+
+Anda harus melihat folder seperti: `frontend`, `gateway`, `user`, `menu`, dll.
+
 ---
 
-### 🐳 Langkah 3 — Build dan Jalankan Semua Container
+## ▶️ Cara Menjalankan Proyek
 
-Perintah ini akan membangun semua image Docker dan menjalankan semua layanan sekaligus:
+### Metode 1: Jalankan Semua Service Sekaligus (Recommended)
+
+#### **Build dan Jalankan**
 
 ```bash
 docker compose up --build
 ```
 
-> ⏳ **Proses build pertama kali** membutuhkan waktu beberapa menit karena Docker perlu mengunduh semua dependensi. Build selanjutnya akan jauh lebih cepat.
+**Penjelasan**:
+- `docker compose up` → Jalankan semua container
+- `--build` → Build ulang image Docker (gunakan saat pertama kali atau ada perubahan kode)
 
----
+#### **Jalankan di Background**
 
-### 🔄 Langkah 4 — Menjalankan di Background (Opsional)
-
-Jika Anda ingin menjalankan semua container di background tanpa memblokir terminal:
+Jika Anda ingin terminal tetap bisa digunakan:
 
 ```bash
 docker compose up -d
 ```
 
-> 💡 Flag `-d` berarti **detached mode** — container berjalan di latar belakang.
+**Penjelasan**:
+- `-d` → Detached mode (berjalan di background)
+
+#### **Lihat Logs**
+
+```bash
+docker compose logs -f
+```
+
+**Penjelasan**:
+- `-f` → Follow mode (terus update logs real-time)
 
 ---
 
-### 🛑 Menghentikan Semua Container
+### Metode 2: Jalankan Service Tertentu
+
+Jika Anda hanya ingin menjalankan beberapa service:
+
+```bash
+# Jalankan hanya frontend dan gateway
+docker compose up frontend gateway
+
+# Jalankan hanya monitoring
+docker compose up monitoring
+```
+
+---
+
+### 🛑 Cara Menghentikan Aplikasi
+
+#### **Stop Semua Container**
 
 ```bash
 docker compose down
+```
+
+#### **Stop dan Hapus Volume**
+
+```bash
+docker compose down -v
+```
+
+**Penjelasan**:
+- `-v` → Hapus juga volume (data persistent)
+
+#### **Stop dan Hapus Image**
+
+```bash
+docker compose down --rmi all
 ```
 
 ---
 
 ## 🌍 Akses Aplikasi
 
-Setelah semua container berjalan, akses layanan melalui URL berikut:
+Setelah semua container berjalan, Anda bisa akses aplikasi melalui browser:
 
-| Layanan | URL | Keterangan |
+### Daftar URL Akses
+
+| Service | URL | Keterangan |
 |---------|-----|------------|
-| 🔀 **Nginx Proxy** | [http://localhost](http://localhost) | Entry point utama aplikasi |
-| 🖥️ **Frontend** | [http://localhost:5000](http://localhost:5000) | Antarmuka pengguna React |
-| 🚪 **API Gateway** | [http://localhost:8080](http://localhost:8080) | Gateway pusat semua API |
-| 👥 **User Service** | [http://localhost:3000](http://localhost:3000) | Layanan manajemen pengguna |
-| 🍽️ **Menu Service** | [http://localhost:3002](http://localhost:3002) | Layanan manajemen menu |
-| 💳 **Payment Service** | [http://localhost:3003](http://localhost:3003) | Layanan pembayaran |
-| 📊 **Monitoring** | [http://localhost:3004](http://localhost:3004) | Dashboard monitoring sistem |
-| 📦 **Order Service 1** | [http://localhost:3001](http://localhost:3001) | Instance pertama order |
-| 📦 **Order Service 2** | [http://localhost:3005](http://localhost:3005) | Instance kedua order |
+| **Nginx Proxy** | [http://localhost](http://localhost) | Entry point utama |
+| **Frontend** | [http://localhost:5000](http://localhost:5000) | Aplikasi React |
+| **API Gateway** | [http://localhost:8080](http://localhost:8080) | Gateway API |
+| **User Service** | [http://localhost:3000](http://localhost:3000) | Service user |
+| **Menu Service** | [http://localhost:3002](http://localhost:3002) | Service menu |
+| **Order Service 1** | [http://localhost:3001](http://localhost:3001) | Service order instance 1 |
+| **Order Service 2** | [http://localhost:3005](http://localhost:3005) | Service order instance 2 |
+| **Payment Service** | [http://localhost:3003](http://localhost:3003) | Service payment |
+| **Monitoring** | [http://localhost:3004](http://localhost:3004) | Service monitoring |
 
----
+### Testing Akses
 
-## 🔌 API Endpoints
+Buka browser dan coba akses:
 
-Semua endpoint di bawah ini dapat diakses melalui API Gateway di `http://localhost:8080`
-
-### 👥 User Service
-
-```http
-GET /user
 ```
-Mengambil daftar semua pengguna yang terdaftar.
-
----
-
-### 🍽️ Menu Service
-
-```http
-GET /menu
+http://localhost:5000
 ```
-Mengambil seluruh daftar menu restoran yang tersedia.
+
+Anda akan melihat frontend aplikasi restoran.
 
 ---
 
-### 📦 Order Service
+## 🔌 Endpoint API
 
-```http
-GET /order
+Berikut adalah endpoint yang tersedia di setiap service:
+
+### 1️⃣ User Service (`http://localhost:3000`)
+
+| Method | Endpoint | Deskripsi | Response |
+|--------|----------|-----------|----------|
+| `GET` | `/user` | Get semua user | `{ users: [...] }` |
+| `GET` | `/health` | Health check | `{ status: "OK" }` |
+
+**Contoh Request**:
+```bash
+curl http://localhost:3000/user
 ```
-Mengambil daftar semua pesanan yang masuk dan sedang diproses.
 
 ---
 
-### 💳 Payment Service
+### 2️⃣ Menu Service (`http://localhost:3002`)
 
-```http
-GET /payment
+| Method | Endpoint | Deskripsi | Response |
+|--------|----------|-----------|----------|
+| `GET` | `/menu` | Get semua menu | `{ menus: [...] }` |
+| `GET` | `/health` | Health check | `{ status: "OK" }` |
+
+**Contoh Request**:
+```bash
+curl http://localhost:3002/menu
 ```
-Mengambil data dan riwayat transaksi pembayaran.
 
 ---
 
-### 📊 Monitoring Service
+### 3️⃣ Order Service (`http://localhost:3001` atau `3005`)
 
-```http
-GET /monitoring
+| Method | Endpoint | Deskripsi | Response |
+|--------|----------|-----------|----------|
+| `GET` | `/order` | Get semua order | `{ orders: [...] }` |
+| `GET` | `/health` | Health check | `{ status: "OK" }` |
+
+**Contoh Request**:
+```bash
+curl http://localhost:3001/order
 ```
-Mengambil status dan informasi kesehatan semua layanan yang berjalan.
 
 ---
 
-## ❤️ Health Check
+### 4️⃣ Payment Service (`http://localhost:3003`)
 
-Setiap layanan memiliki endpoint `/health` untuk memastikan layanan berjalan dengan baik. Hal ini berguna untuk monitoring otomatis dan load balancer.
+| Method | Endpoint | Deskripsi | Response |
+|--------|----------|-----------|----------|
+| `GET` | `/payment` | Get payment info | `{ payments: [...] }` |
+| `GET` | `/health` | Health check | `{ status: "OK" }` |
 
-### Cara Mengecek Kesehatan Layanan
+**Contoh Request**:
+```bash
+curl http://localhost:3003/payment
+```
+
+---
+
+### 5️⃣ Monitoring Service (`http://localhost:3004`)
+
+| Method | Endpoint | Deskripsi | Response |
+|--------|----------|-----------|----------|
+| `GET` | `/monitoring` | Get status semua service | `{ services: [...] }` |
+| `GET` | `/health` | Health check | `{ status: "OK" }` |
+
+**Contoh Request**:
+```bash
+curl http://localhost:3004/monitoring
+```
+
+---
+
+### ❤️ Health Check Semua Service
+
+Setiap service memiliki endpoint health check:
 
 ```bash
-# Cek kesehatan User Service
+# User Service
 curl http://localhost:3000/health
 
-# Cek kesehatan Menu Service
+# Menu Service
 curl http://localhost:3002/health
 
-# Cek kesehatan Order Service 1
+# Order Service
 curl http://localhost:3001/health
 
-# Cek kesehatan Payment Service
+# Payment Service
 curl http://localhost:3003/health
 
-# Cek kesehatan Monitoring Service
+# Monitoring Service
 curl http://localhost:3004/health
 ```
 
-### Contoh Response Health Check
-
+**Response**:
 ```json
 {
   "status": "OK",
   "service": "User Service",
-  "timestamp": "2024-01-01T12:00:00.000Z",
-  "uptime": "5 minutes"
+  "timestamp": "2024-01-15T10:30:00Z"
 }
 ```
 
-> ✅ Jika response mengembalikan `"status": "OK"` berarti layanan berjalan normal.
-
 ---
 
-## 🐳 Docker Commands
+## 🐳 Perintah Docker
 
-Berikut adalah perintah-perintah Docker yang sering digunakan dalam proyek ini:
-
-### 📋 Melihat Status Container
+### Melihat Status Container
 
 ```bash
-# Melihat semua container yang sedang berjalan
+# Lihat container yang sedang berjalan
 docker compose ps
+
+# Lihat semua container (termasuk yang stopped)
+docker compose ps -a
 ```
 
 ---
 
-### 📜 Melihat Log
+### Melihat Logs
 
 ```bash
-# Melihat log semua layanan secara realtime
+# Lihat semua logs
+docker compose logs
+
+# Lihat logs real-time
 docker compose logs -f
 
-# Melihat log layanan tertentu saja (contoh: gateway)
+# Lihat logs service tertentu
 docker compose logs -f gateway
 
-# Melihat log User Service
-docker compose logs -f user
-
-# Melihat log Order Service 1
-docker compose logs -f order-service-1
+# Lihat 100 baris terakhir
+docker compose logs --tail=100
 ```
-
-> 💡 Flag `-f` berarti **follow** — log akan terus diperbarui secara realtime.
 
 ---
 
-### 🔨 Rebuild Layanan Tertentu
-
-Berguna ketika Anda mengubah kode pada satu layanan saja:
+### Restart Service
 
 ```bash
-# Rebuild hanya layanan monitoring
+# Restart semua service
+docker compose restart
+
+# Restart service tertentu
+docker compose restart user
+
+# Restart beberapa service
+docker compose restart user menu payment
+```
+
+---
+
+### Rebuild Service
+
+```bash
+# Rebuild semua service
+docker compose up --build
+
+# Rebuild service tertentu
 docker compose up --build monitoring
 
-# Rebuild hanya layanan gateway
-docker compose up --build gateway
+# Rebuild tanpa cache
+docker compose build --no-cache
 ```
 
 ---
 
-### 🔁 Restart Semua Layanan
+### Masuk ke Container
 
 ```bash
+# Masuk ke container user
+docker compose exec user sh
+
+# Masuk ke container frontend
+docker compose exec frontend sh
+
+# Jalankan command di container
+docker compose exec user npm --version
+```
+
+---
+
+### Menghapus Container dan Image
+
+```bash
+# Hapus semua container
+docker compose down
+
+# Hapus container dan volume
+docker compose down -v
+
+# Hapus container, volume, dan image
+docker compose down -v --rmi all
+
+# Hapus semua (termasuk orphan)
+docker compose down -v --rmi all --remove-orphans
+```
+
+---
+
+### Monitoring Resource
+
+```bash
+# Lihat penggunaan resource
+docker stats
+
+# Lihat resource container tertentu
+docker stats user gateway
+```
+
+---
+
+## 📈 Konsep Skalabilitas
+
+### Apa itu Skalabilitas?
+
+**Skalabilitas** adalah kemampuan sistem untuk menangani peningkatan beban dengan menambah resource.
+
+### Jenis Skalabilitas
+
+| Jenis | Penjelasan | Contoh |
+|-------|------------|--------|
+| **Vertical Scaling** | Menambah resource (CPU, RAM) pada satu server | Upgrade server dari 2 core ke 8 core |
+| **Horizontal Scaling** | Menambah jumlah server/instance | Dari 1 instance jadi 5 instance |
+
+Proyek ini menggunakan **Horizontal Scaling** ✅
+
+---
+
+### Fitur Skalabilitas dalam Proyek
+
+#### 1. **Multiple Order Service Instances**
+
+Dalam proyek ini, ada 2 instance Order Service:
+- Order Service 1 (Port 3001)
+- Order Service 2 (Port 3005)
+
+Jika traffic tinggi, request akan didistribusikan ke kedua instance.
+
+#### 2. **Stateless Services**
+
+Semua service tidak menyimpan state di memory, sehingga bisa di-scale dengan mudah.
+
+#### 3. **API Gateway**
+
+Gateway berfungsi sebagai **load balancer** yang mendistribusikan request.
+
+#### 4. **Docker-Based**
+
+Dengan Docker, menambah instance semudah menjalankan container baru.
+
+---
+
+### Cara Scale Service
+
+#### **Scale Order Service menjadi 5 Instance**
+
+```bash
+docker compose up --scale order-service-1=5
+```
+
+#### **Scale User Service menjadi 3 Instance**
+
+```bash
+docker compose up --scale user=3
+```
+
+#### **Scale Multiple Service**
+
+```bash
+docker compose up --scale user=3 --scale order-service-1=5
+```
+
+---
+
+### Monitoring Saat Scale
+
+Setelah scale, cek status:
+
+```bash
+# Lihat semua container
+docker compose ps
+
+# Monitor resource
+docker stats
+```
+
+---
+
+## 🗺️ Roadmap Pengembangan
+
+### 🟢 Phase 1: Foundation (SELESAI ✅)
+
+| Fitur | Status | Keterangan |
+|-------|--------|------------|
+| Core Microservices | ✅ | User, Menu, Order, Payment, Monitoring |
+| API Gateway | ✅ | Routing dan load balancing |
+| Docker Infrastructure | ✅ | Containerization semua service |
+| Reverse Proxy | ✅ | Nginx sebagai entry point |
+| Monitoring Service | ✅ | Health check dan status |
+
+---
+
+### 🟡 Phase 2: Enhancement (SEDANG DIKERJAKAN 🔄)
+
+| Fitur | Status | Target Selesai |
+|-------|--------|----------------|
+| PostgreSQL Integration | 🔄 | Q2 2024 |
+| JWT Authentication | 🔄 | Q2 2024 |
+| Admin Dashboard | 🔄 | Q2 2024 |
+| Stock Management | 🔄 | Q3 2024 |
+| Order History | 🔄 | Q3 2024 |
+
+**Penjelasan**:
+- Database untuk menyimpan data persistent
+- JWT untuk keamanan autentikasi
+- Dashboard admin untuk kelola semua data
+- Stock management untuk tracking bahan baku
+
+---
+
+### 🔵 Phase 3: Advanced Features (RENCANA 📋)
+
+| Fitur | Status | Target Selesai |
+|-------|--------|----------------|
+| Redis Caching | 📋 | Q4 2024 |
+| Kubernetes Deployment | 📋 | Q4 2024 |
+| CI/CD Pipeline | 📋 | Q4 2024 |
+| Prometheus & Grafana | 📋 | Q1 2025 |
+| Auto Scaling | 📋 | Q1 2025 |
+| Message Queue (RabbitMQ) | 📋 | Q1 2025 |
+
+**Penjelasan**:
+- **Redis**: Cache untuk query yang sering diakses
+- **Kubernetes**: Orchestration yang lebih advanced
+- **CI/CD**: Otomasi testing dan deployment
+- **Prometheus/Grafana**: Monitoring dan visualisasi
+- **Auto Scaling**: Scale otomatis berdasarkan load
+- **Message Queue**: Komunikasi asynchronous antar service
+
+---
+
+### 🟣 Phase 4: Production Ready (MASA DEPAN 🚀)
+
+| Fitur | Status | Target |
+|-------|--------|--------|
+| Security Hardening | 📋 | Q2 2025 |
+| Performance Optimization | 📋 | Q2 2025 |
+| Load Testing | 📋 | Q2 2025 |
+| Disaster Recovery | 📋 | Q3 2025 |
+| Multi-Region Deployment | 📋 | Q3 2025 |
+
+---
+
+## 🔧 Troubleshooting
+
+### ❌ Problem 1: Port Sudah Digunakan
+
+**Error**:
+```
+Error: bind: address already in use
+```
+
+**Solusi**:
+```bash
+# Cek port yang digunakan (Windows)
+netstat -ano | findstr :3000
+
+# Cek port yang digunakan (Linux/Mac)
+lsof -i :3000
+
+# Matikan process yang menggunakan port
+kill -9 <PID>
+```
+
+---
+
+### ❌ Problem 2: Docker Compose Tidak Ditemukan
+
+**Error**:
+```
+command not found: docker compose
+```
+
+**Solusi**:
+```bash
+# Install Docker Compose
+# Windows/Mac: sudah include dalam Docker Desktop
+# Linux:
+sudo curl -L "https://github.com/docker/compose/releases/download/v2.20.0/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
+sudo chmod +x /usr/local/bin/docker-compose
+```
+
+---
+
+### ❌ Problem 3: Container Terus Restart
+
+**Error**:
+Container status `Restarting`
+
+**Solusi**:
+```bash
+# Lihat logs untuk cari error
+docker compose logs <service-name>
+
+# Contoh
+docker compose logs user
+
+# Rebuild image
+docker compose up --build <service-name>
+```
+
+---
+
+### ❌ Problem 4: Cannot Connect to Service
+
+**Error**:
+`ECONNREFUSED` atau `Connection refused`
+
+**Solusi**:
+```bash
+# 1. Pastikan semua container running
+docker compose ps
+
+# 2. Cek network
+docker network ls
+docker network inspect restaurant-microservices-main_default
+
+# 3. Restart semua service
 docker compose restart
 ```
 
 ---
 
-### 🧹 Membersihkan Container dan Image
+### ❌ Problem 5: Docker Out of Space
 
+**Error**:
+```
+no space left on device
+```
+
+**Solusi**:
 ```bash
-# Menghentikan dan menghapus semua container
-docker compose down
+# Hapus unused container
+docker container prune
 
-# Menghentikan, menghapus container beserta volume-nya
-docker compose down -v
+# Hapus unused image
+docker image prune
 
-# Menghapus semua image yang tidak terpakai
-docker image prune -a
+# Hapus semua unused resources
+docker system prune -a
+
+# Lihat penggunaan disk
+docker system df
 ```
 
 ---
 
-## 📈 Skalabilitas
+### ❌ Problem 6: Frontend Tidak Load
 
-Proyek ini dirancang dengan mempertimbangkan **horizontal scalability**, yaitu kemampuan untuk meningkatkan kapasitas dengan menambah lebih banyak instance layanan, bukan dengan meningkatkan spesifikasi server.
-
-### ⚡ Fitur Skalabilitas
-
-| Fitur | Penjelasan |
-|-------|------------|
-| **Independent Services** | Setiap layanan dapat di-scale secara terpisah sesuai kebutuhan |
-| **Stateless API** | API tidak menyimpan state, sehingga mudah direplikasi |
-| **Order Service Cluster** | Sudah memiliki 2 instance order service yang siap melayani |
-| **API Gateway** | Mendistribusikan traffic secara merata ke semua instance |
-| **Docker-based** | Mudah menambah atau mengurangi instance hanya dengan satu perintah |
-
-### 🔢 Contoh Scaling Order Service
-
-Misalnya traffic pesanan sedang sangat tinggi, Anda bisa menambah instance order service:
-
+**Solusi**:
 ```bash
-# Menjalankan 3 instance Order Service 1 sekaligus
-docker compose up --scale order-service-1=3
+# 1. Cek logs frontend
+docker compose logs frontend
 
-# Menjalankan 5 instance Order Service 1
-docker compose up --scale order-service-1=5
+# 2. Rebuild frontend
+docker compose up --build frontend
+
+# 3. Clear browser cache
+# Tekan Ctrl + Shift + Delete di browser
+
+# 4. Akses langsung tanpa nginx
+http://localhost:5000
 ```
 
-> 💡 Dengan **API Gateway**, semua instance tersebut akan menerima traffic secara otomatis tanpa konfigurasi tambahan.
+---
+
+### 🆘 Cara Mendapatkan Bantuan
+
+Jika masalah masih berlanjut:
+
+1. **Buat Issue di GitHub**
+   ```
+   https://github.com/your-username/restaurant-microservices/issues
+   ```
+
+2. **Sertakan Informasi**:
+   - Versi Docker: `docker --version`
+   - Versi Docker Compose: `docker compose version`
+   - OS: Windows/Mac/Linux
+   - Logs error: `docker compose logs`
 
 ---
 
-## 🗺️ Roadmap
+## 👨‍💻 Kontributor
 
-### ✅ Phase 1 — Fondasi (Selesai)
+### Author
 
-> Membangun infrastruktur dasar microservices
+<table>
+  <tr>
+    <td align="center">
+      <img src="https://via.placeholder.com/100" width="100px;" alt=""/>
+      <br />
+      <sub><b>Angelino Zuliano Hutapea</b></sub>
+      <br />
+      <sub>Full Stack Developer</sub>
+      <br />
+      <sub>Microservices Enthusiast</sub>
+    </td>
+  </tr>
+</table>
 
-- [x] Core Microservices (User, Menu, Order, Payment)
-- [x] API Gateway sebagai routing terpusat
-- [x] Docker & Docker Compose infrastructure
-- [x] Nginx Reverse Proxy
-- [x] Monitoring Service & Health Checks
+### Cara Berkontribusi
+
+Kami sangat terbuka untuk kontribusi! Berikut langkahnya:
+
+1. **Fork Repository**
+   ```bash
+   # Klik tombol "Fork" di GitHub
+   ```
+
+2. **Clone Fork Anda**
+   ```bash
+   git clone https://github.com/your-username/restaurant-microservices.git
+   ```
+
+3. **Buat Branch Baru**
+   ```bash
+   git checkout -b feature/fitur-baru
+   ```
+
+4. **Commit Changes**
+   ```bash
+   git add .
+   git commit -m "Menambahkan fitur baru"
+   ```
+
+5. **Push ke GitHub**
+   ```bash
+   git push origin feature/fitur-baru
+   ```
+
+6. **Buat Pull Request**
+   - Buka repository di GitHub
+   - Klik "New Pull Request"
+   - Jelaskan perubahan yang Anda buat
 
 ---
 
-### 🔄 Phase 2 — Penguatan (Dalam Pengembangan)
+## 📞 Kontak
 
-> Menambahkan fitur keamanan dan persistensi data
-
-- [ ] Integrasi PostgreSQL untuk penyimpanan data persisten
-- [ ] JWT Authentication untuk keamanan API
-- [ ] Admin Dashboard yang lebih lengkap
-- [ ] Manajemen Stok dan Inventaris
-
----
-
-### 📋 Phase 3 — Optimasi & Produksi (Direncanakan)
-
-> Mempersiapkan sistem untuk lingkungan produksi skala besar
-
-- [ ] Redis Caching untuk performa yang lebih cepat
-- [ ] Kubernetes Deployment untuk orkestrasi skala enterprise
-- [ ] CI/CD Pipeline dengan GitHub Actions
-- [ ] Prometheus & Grafana untuk monitoring visual
-- [ ] Auto Scaling berdasarkan beban traffic
-
----
-
-## 👨‍💻 Author
-
-<p align="center">
-  <b>Angelino Zuliano Hutapea</b><br/>
-  Full Stack Developer • Microservices Enthusiast<br/><br/>
-  <a href="https://github.com/your-username">
-    <img src="https://img.shields.io/badge/GitHub-100000?style=for-the-badge&logo=github&logoColor=white" />
-  </a>
-  <a href="https://linkedin.com/in/your-profile">
-    <img src="https://img.shields.io/badge/LinkedIn-0077B5?style=for-the-badge&logo=linkedin&logoColor=white" />
-  </a>
-</p>
+| Platform | Link |
+|----------|------|
+| 📧 Email | angelino.hutapea@example.com |
+| 💼 LinkedIn | [linkedin.com/in/angelino-hutapea](https://linkedin.com/in/angelino-hutapea) |
+| 🐙 GitHub | [github.com/angelino-hutapea](https://github.com/angelino-hutapea) |
+| 🌐 Portfolio | [angelino-hutapea.dev](https://angelino-hutapea.dev) |
 
 ---
 
 ## 📄 Lisensi
 
-Proyek ini dilisensikan di bawah **MIT License** — bebas digunakan, dimodifikasi, dan didistribusikan untuk keperluan apapun dengan tetap mencantumkan kredit kepada penulis asli.
+Proyek ini dilisensikan di bawah **MIT License**.
+
+### Apa yang Boleh Dilakukan?
+
+✅ Gunakan untuk proyek komersial  
+✅ Modifikasi sesuai kebutuhan  
+✅ Distribusikan ulang  
+✅ Gunakan untuk pembelajaran  
+
+### Yang Harus Dilakukan
+
+⚠️ Sertakan copyright notice  
+⚠️ Sertakan lisensi MIT  
+
+---
+
+## 🎓 Pembelajaran
+
+### Yang Bisa Dipelajari dari Proyek Ini
+
+| Konsep | Level | Keterangan |
+|--------|-------|------------|
+| **Microservices Architecture** | ⭐⭐⭐ | Pemisahan service berdasarkan domain |
+| **Docker Containerization** | ⭐⭐⭐ | Membuat dan manage container |
+| **API Gateway Pattern** | ⭐⭐ | Routing dan load balancing |
+| **Reverse Proxy** | ⭐⭐ | Nginx configuration |
+| **RESTful API** | ⭐⭐ | Desain API yang baik |
+| **React Frontend** | ⭐⭐ | Modern frontend development |
+| **DevOps Practices** | ⭐⭐⭐ | CI/CD, monitoring, scaling |
+
+---
+
+## 📚 Referensi
+
+### Dokumentasi Resmi
+
+- [Docker Documentation](https://docs.docker.com/)
+- [Docker Compose Documentation](https://docs.docker.com/compose/)
+- [Nginx Documentation](https://nginx.org/en/docs/)
+- [Node.js Documentation](https://nodejs.org/en/docs/)
+- [React Documentation](https://react.dev/)
+- [Express.js Documentation](https://expressjs.com/)
+
+### Tutorial Recommended
+
+- [Microservices Architecture by Martin Fowler](https://martinfowler.com/articles/microservices.html)
+- [Docker for Beginners](https://docker-curriculum.com/)
+- [Nginx Tutorial](https://nginx.org/en/docs/beginners_guide.html)
+
+---
+
+## 🎉 Terima Kasih
+
+Terima kasih telah menggunakan **Restaurant Microservices Platform**!
+
+Jika proyek ini bermanfaat, jangan lupa:
+
+⭐ **Star repository ini di GitHub**  
+🔔 **Watch untuk update terbaru**  
+🍴 **Fork untuk eksperimen sendiri**  
+📢 **Share ke teman-teman developer**  
 
 ---
 
 <p align="center">
-  ⭐ <b>Jika proyek ini bermanfaat, jangan lupa berikan bintang di GitHub!</b> ⭐<br/><br/>
-  Dibangun dengan ❤️ menggunakan Microservices Architecture dan Docker Infrastructure
+  <strong>Built with ❤️ using Microservices Architecture and Docker</strong>
+  <br/>
+  <sub>© 2024 Angelino Zuliano Hutapea. All rights reserved.</sub>
+</p>
+
+<p align="center">
+  <img src="https://img.shields.io/badge/Made%20with-Node.js-339933?style=for-the-badge&logo=node.js" />
+  <img src="https://img.shields.io/badge/Powered%20by-Docker-2496ED?style=for-the-badge&logo=docker" />
+  <img src="https://img.shields.io/badge/UI-React-61DAFB?style=for-the-badge&logo=react" />
 </p>
