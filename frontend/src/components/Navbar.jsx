@@ -15,7 +15,6 @@ const navLinks = [
   { path: '/menu', label: 'Menu', icon: UtensilsCrossed },
   { path: '/order', label: 'Orders', icon: ShoppingCart },
   { path: '/payment', label: 'Payment', icon: CreditCard },
-  { path: '/monitoring', label: 'Monitor', icon: Activity },
 ];
 
 export default function Navbar() {

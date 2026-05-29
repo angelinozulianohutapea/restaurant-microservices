@@ -6,10 +6,15 @@ app.use(cors());
 app.use(express.json());
 
 const orderServers = [
-  'http://order-service-1:3001',
-  'http://order-service-2:3005'
+  { url: 'http://order-service-1:3001', connections: 0, name: 'order-service-1' },
+  { url: 'http://order-service-2:3005', connections: 0, name: 'order-service-2' }
 ];
-let i = 0;
+
+function getLeastConnServer() {
+  return orderServers.reduce((least, server) => 
+    server.connections < least.connections ? server : least
+  );
+}
 
 app.get('/', (req, res) => { res.send('Gateway berjalan'); });
 
@@ -62,17 +67,30 @@ app.delete('/menu/:id', async (req, res) => {
 });
 
 app.post('/order', async (req, res) => {
-  const target = orderServers[i++ % orderServers.length];
-  try { const r = await axios.post(target + '/order', req.body); res.json(r.data); }
-  catch (err) {
-    console.log('SERVER GAGAL:', target);
-    const backup = orderServers[i++ % orderServers.length];
-    try { const r = await axios.post(backup + '/order', req.body); res.json(r.data); }
-    catch (err2) { res.status(500).json({ error: 'Semua order service down' }); }
+  const target = getLeastConnServer();
+  target.connections++;
+  console.log(`[LB] Pilih: ${target.name} | Beban: service-1=${orderServers[0].connections} service-2=${orderServers[1].connections}`);
+  try {
+    const r = await axios.post(target.url + '/order', req.body, { timeout: 5000 }); // ← tambah timeout
+    target.connections--;
+    res.json(r.data);
+  } catch (err) {
+    target.connections--;  // ← pastikan ini terpanggil saat timeout
+    console.log(`[FAILOVER] ${target.name} gagal, pindah ke service lain...`);
+    const backup = orderServers.find(s => s.url !== target.url);
+    backup.connections++;
+    try {
+      const r = await axios.post(backup.url + '/order', req.body, { timeout: 5000 });
+      backup.connections--;
+      res.json(r.data);
+    } catch (err2) {
+      backup.connections--;
+      res.status(500).json({ error: 'Semua order service down' });
+    }
   }
 });
 app.get('/orders', async (req, res) => {
-  try { const r = await axios.get(orderServers[0] + '/orders'); res.json(r.data); }
+  try { const r = await axios.get(orderServers[0].url + '/orders'); res.json(r.data); }
   catch (err) { res.status(500).json({ error: 'Order service down' }); }
 });
 

@@ -172,11 +172,10 @@ export default function Payment() {
                         whileHover={{ scale: 1.01 }}
                         whileTap={{ scale: 0.99 }}
                         onClick={() => setMethod(m.id)}
-                        className={`w-full flex items-center gap-4 p-4 rounded-2xl border transition-all ${
-                          selected
+                        className={`w-full flex items-center gap-4 p-4 rounded-2xl border transition-all ${selected
                             ? 'border-purple-500/40 bg-purple-500/10'
                             : 'border-white/5 bg-white/3 hover:border-white/10 hover:bg-white/5'
-                        }`}
+                          }`}
                       >
                         <div className={`w-12 h-12 rounded-xl bg-gradient-to-br ${m.color} flex items-center justify-center shadow-lg flex-shrink-0`}>
                           <Icon className="w-6 h-6 text-white" />
@@ -185,9 +184,8 @@ export default function Payment() {
                           <p className="text-sm font-bold text-white">{m.label}</p>
                           <p className="text-xs text-white/40 mt-0.5">{m.desc}</p>
                         </div>
-                        <div className={`w-5 h-5 rounded-full border-2 flex items-center justify-center transition-all flex-shrink-0 ${
-                          selected ? 'border-purple-400 bg-purple-500' : 'border-white/20'
-                        }`}>
+                        <div className={`w-5 h-5 rounded-full border-2 flex items-center justify-center transition-all flex-shrink-0 ${selected ? 'border-purple-400 bg-purple-500' : 'border-white/20'
+                          }`}>
                           {selected && <div className="w-2 h-2 rounded-full bg-white" />}
                         </div>
                       </motion.button>
@@ -292,10 +290,10 @@ export default function Payment() {
                 <motion.button
                   whileHover={{ scale: 1.03 }}
                   whileTap={{ scale: 0.97 }}
-                  onClick={() => navigate('/monitoring')}
+                  onClick={() => navigate('/order')}
                   className="btn-primary px-6 py-3 rounded-xl font-semibold flex items-center justify-center gap-2"
                 >
-                  View in Dashboard
+                  Back to home
                 </motion.button>
                 <motion.button
                   whileHover={{ scale: 1.03 }}
